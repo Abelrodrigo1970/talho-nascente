@@ -82,9 +82,8 @@ const products = [
         name: 'Bifanas de Porco',
         description: 'Perefeito para o Pão',
         price: '€ 5,99/kg',
-        image: 'images/Bifanas.jpg'
+        image: 'images/bifanas.jpg'
     },
-
     {
         name: 'Frango',
         description: 'Perefeito para tudo',
