@@ -224,4 +224,123 @@ footer {
     .hero-content h2 {
         font-size: 2rem;
     }
+}
+
+/* Modal Receita */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background: #fff;
+  margin: 5% auto;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.close-modal {
+  color: #c62828;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Mascote TONO */
+#tono-mascote {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  z-index: 3000;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  border-radius: 50%;
+}
+#tono-mascote:hover {
+  transform: scale(1.08) rotate(-5deg);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+}
+
+/* Chat do TONO */
+.tono-chat {
+  display: none;
+  position: fixed;
+  right: 30px;
+  bottom: 120px;
+  width: 320px;
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  z-index: 4000;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+.tono-chat-header {
+  background: #c62828;
+  color: #fff;
+  padding: 1rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tono-chat-header button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.tono-chat-body {
+  padding: 1rem;
+  height: 220px;
+  overflow-y: auto;
+  background: #fffbe6;
+  font-size: 1rem;
+}
+.tono-chat-form {
+  display: flex;
+  border-top: 1px solid #eee;
+}
+.tono-chat-form input {
+  flex: 1;
+  border: none;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 0 0 0 18px;
+  outline: none;
+}
+.tono-chat-form button {
+  background: #c62828;
+  color: #fff;
+  border: none;
+  padding: 0 1.2rem;
+  font-size: 1rem;
+  border-radius: 0 0 18px 0;
+  cursor: pointer;
+}
+.tono-chat-msg-user {
+  text-align: right;
+  margin-bottom: 0.5rem;
+}
+.tono-chat-msg-tono {
+  text-align: left;
+  margin-bottom: 0.5rem;
+  color: #c62828;
 } 

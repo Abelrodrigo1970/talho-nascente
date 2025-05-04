@@ -136,4 +136,48 @@ document.addEventListener('DOMContentLoaded', () => {
         const header = document.querySelector('header');
         header.classList.toggle('scrolled', window.scrollY > 0);
     });
+});
+
+// Carregar receitas dinamicamente
+function loadReceitas() {
+  const grid = document.getElementById('recipes-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  receitas.forEach(receita => {
+    const card = document.createElement('div');
+    card.className = 'recipe-card';
+    card.style.cursor = 'pointer';
+    card.innerHTML = `
+      <img src="${receita.imagem}" alt="${receita.nome}">
+      <h3>${receita.nome}</h3>
+      <p>${receita.resumo}</p>
+    `;
+    card.addEventListener('click', () => TONO.mostrarReceitaNoModal(receita));
+    grid.appendChild(card);
+  });
+}
+
+// Fechar modal
+document.addEventListener('DOMContentLoaded', function() {
+  loadReceitas();
+  const modal = document.getElementById('modal-receita');
+  const closeModal = document.querySelector('#modal-receita .close-modal');
+  if (closeModal && modal) {
+    closeModal.addEventListener('click', function() {
+      modal.style.display = 'none';
+    });
+    window.addEventListener('click', function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    });
+  }
+
+  const tonoMascote = document.getElementById('tono-mascote');
+  if (tonoMascote) {
+    tonoMascote.addEventListener('click', function() {
+      const sugestao = TONO.sugereReceita();
+      TONO.mostrarReceitaNoModal(sugestao);
+    });
+  }
 }); 
