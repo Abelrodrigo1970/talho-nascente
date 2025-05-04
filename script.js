@@ -80,31 +80,31 @@ const products = [
     },
     {
         name: 'Bifanas de Porco',
-        description: 'Perefeito para o Pão',
+        description: 'Perfeito para o Pão',
         price: '€ 5,99/kg',
         image: 'images/bifanas.jpg'
     },
     {
         name: 'Frango',
-        description: 'Perefeito para tudo',
+        description: 'Perfeito para tudo',
         price: '€ 2,65/kg',
         image: 'images/FRANGO.jpg'
     },
     {
         name: 'Asas de Frango',
-        description: 'Perefeito para Grelhar',
+        description: 'Perfeito para Grelhar',
         price: '€ 2,39/kg',
         image: 'images/ASAS_FRANGO.jpg'
     },   
     {
         name: 'Coxas de Frango',
-        description: 'Perefeito para Assar',
+        description: 'Perfeito para Assar',
         price: '€ 2,95/kg',
         image: 'images/coxas_frango.jpg'
     },
     {
         name: 'Perninhas de Frango',
-        description: 'Perefeito para Massa',
+        description: 'Perfeito para a Air Fryer',
         price: '€ 4,99/kg',
         image: 'images/pernas_frango.jpg'
     }
