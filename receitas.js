@@ -118,5 +118,5 @@ const receitas = [
       "Retifique os temperos, polvilhe com salsa picada e sirva com batatas fritas ou arroz branco."
     ]
   }
-  // Adicione mais receitas aqui conforme necessário
+
 ]; 

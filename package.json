@@ -1,0 +1,23 @@
+{
+  "name": "site_talho",
+  "version": "1.0.0",
+  "main": "receitas.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abelrodrigo1970/talho-nascente.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abelrodrigo1970/talho-nascente/issues"
+  },
+  "homepage": "https://github.com/Abelrodrigo1970/talho-nascente#readme",
+  "description": "",
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}

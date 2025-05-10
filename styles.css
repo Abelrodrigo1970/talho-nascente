@@ -279,6 +279,7 @@ footer {
 .tono-chat {
   display: none;
   position: fixed;
+  text-align: center;
   right: 30px;
   bottom: 120px;
   width: 320px;
@@ -293,19 +294,21 @@ footer {
 }
 .tono-chat-header {
   background: #c62828;
-  color: #fff;
+  color: #f0eff3;
   padding: 1rem;
   font-weight: bold;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content:space-between;
+ 
+ 
 }
 .tono-chat-header button {
   background: none;
   border: none;
-  color: #fff;
+  color: #f0eff6;
   font-size: 1.5rem;
   cursor: pointer;
+  
 }
 .tono-chat-body {
   padding: 1rem;
