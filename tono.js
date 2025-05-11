@@ -147,7 +147,10 @@ const TONO = {
         const receita = receitasEncontradas[0];
         this.mostrarReceitaNoModal(receita);
         this.mostrarMensagem(`Encontrei esta receita: ${receita.nome}`);
-        this.mostrarMensagem("Quer que procure outra receita? (Responda sim ou não)");
+       // this.mostrarMensagem("Quer que procure outra receita? (Responda sim ou não)");
+        // Fechar o chat para permitir visualizar melhor a receita
+        const chat = document.getElementById('tono-chat');
+        if (chat) chat.style.display = 'none';
       } else {
         this.mostrarMensagem("Não encontrei receitas com esse ingrediente. Quer que procure na internet? (Responda sim ou não)");
       }

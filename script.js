@@ -172,12 +172,12 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-
+/*
   const tonoMascote = document.getElementById('tono-mascote');
   if (tonoMascote) {
     tonoMascote.addEventListener('click', function() {
       const sugestao = TONO.sugereReceita();
       TONO.mostrarReceitaNoModal(sugestao);
     });
-  }
+  }*/
 }); 
