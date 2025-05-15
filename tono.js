@@ -186,7 +186,7 @@ buscarReceitaNaInternet: async function(ingrediente) {
         this.mostrarMensagem("Vou procurar uma receita na internet para você... 🍳");
   
         try {
-            const response = await fetch("http://localhost:3000/api/receita", {
+            const response = await fetch("/api/receita", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

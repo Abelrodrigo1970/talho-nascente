@@ -94,7 +94,7 @@ const receitas = [
   {
     id: "costeletas-salsicheiro",
     nome: "Costeletas à Salsicheiro",
-    imagem: "images/costeletas.jpg",
+    imagem: "images/COSTELETAS.jpg",
     resumo: "Costeletas de porco suculentas com molho de salsichas.",
     ingredientes: [
       "4 costeletas de porco",
