@@ -10,11 +10,9 @@ const TONO = {
   // Frases de saudação
   saudacoes: [
     "Olá! Não sabe o que fazer para o Almoço/Jantar?",
-    "Oi! Quer uma sugestão para o Almoço/Jantar?",
-    "E aí! Precisa de ideias para o Almoço/Jantar?",
     "Olá! Que tal uma receita nova para o Almoço/Jantar?"
   ],
-
+  ultimoIngredienteFalhado: null,
   // Inicialização
   init: function() {
     // Usar as receitas diretamente do arquivo receitas.js
@@ -22,8 +20,19 @@ const TONO = {
     // this.iniciarConversa();
   },
 
+  // Função para limpar o chat
+  limparChat: function() {
+    const chatBody = document.getElementById('tono-chat-body');
+    if (chatBody) {
+        chatBody.innerHTML = '';
+    }
+  },
+
   // Função para iniciar conversa
   iniciarConversa: function() {
+    // Limpar o chat antes de iniciar
+    this.limparChat();
+    
     const saudacao = this.saudacoes[Math.floor(Math.random() * this.saudacoes.length)];
     this.mostrarMensagem(saudacao);
     this.mostrarMensagem("Diga um produto (ex: carne de vaca) e eu vou te ajudar a encontrar uma receita!");
@@ -109,8 +118,45 @@ const TONO = {
       });
     }
 
+    // Mostrar o modal
     modal.style.display = 'block';
+
+    // Fechar o chat
+    const chat = document.getElementById('tono-chat');
+    if (chat) {
+      chat.style.display = 'none';
+    }
   },
+
+// Função para buscar receita na internet via API local
+buscarReceitaNaInternet: async function(ingrediente) {
+  try {
+    const response = await fetch("http://localhost:3000/api/receita", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ingrediente })
+    });
+    
+    if (!response.ok) throw new Error('Resposta inválida do servidor');
+
+    const receita = await response.json();
+    if (receita && receita.nome) {
+      this.mostrarReceitaNoModal(receita);
+      this.mostrarMensagem(`Encontrei esta receita online: ${receita.nome}`);
+      // Fecha o chat
+      const chat = document.getElementById('tono-chat');
+      if (chat) chat.style.display = 'none';
+    } else {
+      this.mostrarMensagem("Desculpe, não consegui encontrar uma receita com esse ingrediente.");
+    }
+  } catch (error) {
+    console.error("Erro ao buscar receita online:", error);
+    this.mostrarMensagem("Ocorreu um erro ao procurar a receita online. 😢");
+  }
+},
+
 
   // Função para mostrar mensagem no chat
   mostrarMensagem: function(mensagem, tipo = 'tono') {
@@ -123,39 +169,65 @@ const TONO = {
     const msgDiv = document.createElement('div');
     msgDiv.className = `chat-message ${tipo}`;
     msgDiv.innerHTML = mensagem;
-    
-    chatBody.appendChild(msgDiv);
-    chatBody.scrollTop = chatBody.scrollHeight;
+        chatBody.appendChild(msgDiv)
+        chatBody.scrollTop = chatBody.scrollHeigh    
+    const chat = document.getElementById('tono-chat');
+    if (chat) chat.classList.add('minimizado');
   },
 
   // Função para processar mensagem do usuário
   processarMensagem: async function(mensagem) {
     mensagem = mensagem.toLowerCase();
-    
-    // Mostrar a mensagem do usuário no chat
     this.mostrarMensagem(mensagem, 'user');
+  
+    if (mensagem.includes('sim') && this.ultimoIngredienteFalhado) {
+        // Limpar o chat antes de buscar na internet
+        this.limparChat();
+        this.mostrarMensagem("Vou procurar uma receita na internet para você... 🍳");
+  
+        try {
+            const response = await fetch("http://localhost:3000/api/receita", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ ingrediente: this.ultimoIngredienteFalhado })
+            });
+  
+            if (!response.ok) throw new Error("Erro na resposta do servidor");
+  
+            const receita = await response.json();
+            this.mostrarReceitaNoModal(receita);
+            this.mostrarMensagem(`Encontrei esta receita na internet: ${receita.nome}`);
+            this.ultimoIngredienteFalhado = null;
+
+            // Fechar o chat
+            const chat = document.getElementById('tono-chat');
+            if (chat) chat.style.display = 'none';
+        } catch (error) {
+            this.mostrarMensagem("Desculpe, houve um erro ao buscar online 😞");
+            console.error("Erro ao buscar receita online:", error);
+        }
+  
+        return;
+    }
+  
+    const receitasEncontradas = this.procuraReceita(mensagem);
     
-    if (mensagem.includes('sim') || mensagem.includes('s')) {
-      this.mostrarMensagem("Vou buscar uma receita na internet para você...");
-      // Aqui você pode implementar a busca na internet
-      this.mostrarMensagem("Desculpe, essa funcionalidade ainda está em desenvolvimento!");
-    } else {
-      // Procura receitas que contenham o termo mencionado
-      const receitasEncontradas = this.procuraReceita(mensagem);
-      
-      if (receitasEncontradas && receitasEncontradas.length > 0) {
+    if (receitasEncontradas.length > 0) {
         const receita = receitasEncontradas[0];
         this.mostrarReceitaNoModal(receita);
         this.mostrarMensagem(`Encontrei esta receita: ${receita.nome}`);
-       // this.mostrarMensagem("Quer que procure outra receita? (Responda sim ou não)");
-        // Fechar o chat para permitir visualizar melhor a receita
+        this.ultimoIngredienteFalhado = null;
+
+        // Fechar o chat
         const chat = document.getElementById('tono-chat');
         if (chat) chat.style.display = 'none';
-      } else {
+    } else {
+        this.ultimoIngredienteFalhado = mensagem;
         this.mostrarMensagem("Não encontrei receitas com esse ingrediente. Quer que procure na internet? (Responda sim ou não)");
-      }
     }
-  }
+}
 };
 
 // Inicialização do Tono quando o DOM estiver carregado
@@ -169,9 +241,14 @@ document.addEventListener('DOMContentLoaded', function() {
     tonoMascote.addEventListener('click', function() {
       const chat = document.getElementById('tono-chat');
       if (chat) {
-        chat.style.display = chat.style.display === 'none' ? 'block' : 'none';
-        if (chat.style.display === 'block') {
+        if (chat.style.display === 'none') {
+          // Se o chat estiver fechado, limpa e abre
+          TONO.limparChat();
+          chat.style.display = 'block';
           TONO.iniciarConversa();
+        } else {
+          // Se o chat estiver aberto, apenas fecha
+          chat.style.display = 'none';
         }
       }
     });
