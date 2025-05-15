@@ -131,7 +131,7 @@ const TONO = {
 // Função para buscar receita na internet via API local
 buscarReceitaNaInternet: async function(ingrediente) {
   try {
-    const response = await fetch("http://localhost:3000/api/receita", {
+    const response = await fetch("/api/receita", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
