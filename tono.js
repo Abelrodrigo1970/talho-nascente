@@ -131,7 +131,8 @@ const TONO = {
 // Função para buscar receita na internet via API local
 buscarReceitaNaInternet: async function(ingrediente) {
   try {
-    const response = await fetch("/api/receita", {
+    const response = await fetch("https://talho-nascente.onrender.com/api/receita", {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -186,13 +187,15 @@ buscarReceitaNaInternet: async function(ingrediente) {
         this.mostrarMensagem("Vou procurar uma receita na internet para você... 🍳");
   
         try {
-            const response = await fetch("/api/receita", {
+            const response = await fetch("https://talho-nascente.onrender.com/api/receita", {
+
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ ingrediente: this.ultimoIngredienteFalhado })
             });
+
   
             if (!response.ok) throw new Error("Erro na resposta do servidor");
   
