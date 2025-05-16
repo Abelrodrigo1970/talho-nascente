@@ -12,11 +12,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Configurar CORS para permitir pedidos do domínio
+
+
 const corsOptions = {
-  origin: "http://talhonascente.pt",
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
-};
+    origin: "*",
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  };
+  
 
 // Middleware CORS
 app.use(cors(corsOptions));
