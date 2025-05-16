@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const OpenAI = require("openai");
 
 const openai = new OpenAI({
@@ -10,12 +11,21 @@ const openai = new OpenAI({
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS: Permitir pedidos do teu domínio (ou usa '*' temporariamente)
-app.use(cors({
-  origin: 'http://talhonascente.pt',
-}));
+// Configurar CORS para permitir pedidos do domínio
+const corsOptions = {
+  origin: "http://talhonascente.pt",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+};
+
+// Middleware CORS
+app.use(cors(corsOptions));
+
+// Suporte a preflight requests
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
+app.use(bodyParser.json());
 
 app.post("/api/receita", async (req, res) => {
   const { ingrediente } = req.body;
@@ -49,7 +59,6 @@ Crie uma receita com o ingrediente: ${ingrediente}`;
 
     const jsonText = completion.choices[0].message.content.trim();
     const receita = JSON.parse(jsonText);
-
     res.json(receita);
   } catch (error) {
     console.error("Erro ao gerar receita:", error);
