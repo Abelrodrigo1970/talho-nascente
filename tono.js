@@ -176,40 +176,75 @@ buscarReceitaNaInternet: async function(ingrediente) {
     if (chat) chat.classList.add('minimizado');
   },
 
+  // Função para mostrar animação de carregamento
+  mostrarLoading: function() {
+    const chatBody = document.getElementById('tono-chat-body');
+    if (!chatBody) return;
+
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'tono-loading';
+    loadingDiv.innerHTML = `
+        <div class="tono-loading-dot"></div>
+        <div class="tono-loading-dot"></div>
+        <div class="tono-loading-dot"></div>
+    `;
+    chatBody.appendChild(loadingDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return loadingDiv;
+  },
+
+  // Função para remover animação de carregamento
+  removerLoading: function(loadingElement) {
+    if (loadingElement && loadingElement.parentNode) {
+        loadingElement.parentNode.removeChild(loadingElement);
+    }
+  },
+
   // Função para processar mensagem do usuário
   processarMensagem: async function(mensagem) {
     mensagem = mensagem.toLowerCase();
     this.mostrarMensagem(mensagem, 'user');
   
     if (mensagem.includes('sim') && this.ultimoIngredienteFalhado) {
-        // Limpar o chat antes de buscar na internet
         this.limparChat();
         this.mostrarMensagem("Vou procurar uma receita na internet para você... 🍳");
   
         try {
-            const response = await fetch("https://talho-nascente.onrender.com/api/receita", {
-
-                method: "POST",
+            // Mostrar animação de carregamento
+            const loadingElement = this.mostrarLoading();
+            
+            // Atualizar a URL para usar a API do site em produção
+            const response = await fetch('https://talho-nascente.onrender.com/api/receita', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ ingrediente: this.ultimoIngredienteFalhado })
             });
 
-  
-            if (!response.ok) throw new Error("Erro na resposta do servidor");
-  
+            // Remover animação de carregamento
+            this.removerLoading(loadingElement);
+
+            if (!response.ok) {
+                throw new Error('Erro na resposta do servidor');
+            }
+
             const receita = await response.json();
+            
+            if (receita.error) {
+                throw new Error(receita.error);
+            }
+
             this.mostrarReceitaNoModal(receita);
-            this.mostrarMensagem(`Encontrei esta receita na internet: ${receita.nome}`);
+            this.mostrarMensagem(`Encontrei esta receita especial: ${receita.nome}`);
             this.ultimoIngredienteFalhado = null;
 
             // Fechar o chat
             const chat = document.getElementById('tono-chat');
             if (chat) chat.style.display = 'none';
         } catch (error) {
-            this.mostrarMensagem("Desculpe, houve um erro ao buscar online 😞");
-            console.error("Erro ao buscar receita online:", error);
+            console.error('Erro ao buscar receita:', error);
+            this.mostrarMensagem("Desculpe, não consegui encontrar uma receita online. Tente outro ingrediente!");
         }
   
         return;
