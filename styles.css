@@ -277,73 +277,157 @@ footer {
 
 /* Chat do TONO */
 .tono-chat {
-  display: none;
-  position: fixed;
-  text-align: center;
-  right: 30px;
-  bottom: 120px;
-  width: 320px;
-  max-width: 90vw;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  z-index: 4000;
-  flex-direction: column;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
+
 .tono-chat-header {
-  background: #c62828;
-  color: #f0eff3;
-  padding: 1rem;
-  font-weight: bold;
-  display: flex;
-  justify-content:space-between;
- 
- 
+    background: #c62828;
+    color: white;
+    padding: 15px;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-.tono-chat-header button {
-  background: none;
-  border: none;
-  color: #f0eff6;
-  font-size: 1.5rem;
-  cursor: pointer;
-  
-}
+
 .tono-chat-body {
-  padding: 1rem;
-  height: 220px;
-  overflow-y: auto;
-  background: #fffbe6;
-  font-size: 1rem;
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
+
 .tono-chat-form {
-  display: flex;
-  border-top: 1px solid #eee;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
 }
+
 .tono-chat-form input {
-  flex: 1;
-  border: none;
-  padding: 0.8rem;
-  font-size: 1rem;
-  border-radius: 0 0 0 18px;
-  outline: none;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
 }
+
 .tono-chat-form button {
-  background: #c62828;
-  color: #fff;
-  border: none;
-  padding: 0 1.2rem;
-  font-size: 1rem;
-  border-radius: 0 0 18px 0;
-  cursor: pointer;
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
 }
-.tono-chat-msg-user {
-  text-align: right;
-  margin-bottom: 0.5rem;
-}
+
+/* Estilos para mensagens */
+.tono-chat-msg-user,
 .tono-chat-msg-tono {
-  text-align: left;
-  margin-bottom: 0.5rem;
-  color: #c62828;
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin: 5px 0;
+    word-wrap: break-word;
+}
+
+.tono-chat-msg-user {
+    background: #e3f2fd;
+    align-self: flex-end;
+}
+
+.tono-chat-msg-tono {
+    background: #f5f5f5;
+    align-self: flex-start;
+}
+
+/* Media queries para dispositivos móveis */
+@media screen and (max-width: 768px) {
+    .tono-chat {
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+    }
+
+    .tono-chat-header {
+        border-radius: 0;
+    }
+
+    .tono-chat-body {
+        padding: 10px;
+    }
+
+    .tono-chat-form {
+        padding: 10px;
+    }
+
+    .tono-chat-form input {
+        font-size: 16px; /* Evita zoom automático no iOS */
+    }
+
+    .tono-chat-msg-user,
+    .tono-chat-msg-tono {
+        max-width: 90%;
+    }
+}
+
+/* Ajustes específicos para iPhone */
+@supports (-webkit-touch-callout: none) {
+    .tono-chat {
+        height: 100vh;
+        height: -webkit-fill-available;
+    }
+
+    .tono-chat-body {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .tono-chat-form {
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Animação de carregamento */
+.tono-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 15px;
+    margin: 5px 0;
+    align-self: flex-start;
+}
+
+.tono-loading-dot {
+    width: 8px;
+    height: 8px;
+    background: #c62828;
+    border-radius: 50%;
+    animation: loadingDot 1.4s infinite ease-in-out;
+}
+
+.tono-loading-dot:nth-child(1) { animation-delay: 0s; }
+.tono-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.tono-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loadingDot {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
 } 
