@@ -16,8 +16,49 @@ const TONO = {
   // Inicialização
   init: function() {
     // Usar as receitas diretamente do arquivo receitas.js
-    this.receitas = receitas; // receitas é a variável global definida em receitas.js
-    // this.iniciarConversa();
+    this.receitas = receitas;
+    
+    // Adicionar evento de clique no mascote
+    const mascote = document.getElementById('tono-mascote');
+    if (mascote) {
+      mascote.addEventListener('click', () => {
+        const chat = document.getElementById('tono-chat');
+        if (chat) {
+          chat.style.display = 'block';
+          this.iniciarConversa();
+        }
+      });
+    }
+
+    // Inicialmente esconder o chat
+    const chat = document.getElementById('tono-chat');
+    if (chat) {
+      chat.style.display = 'none';
+    }
+
+    // Adicionar evento de submit no formulário
+    const form = document.getElementById('tono-chat-form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('tono-chat-input');
+        if (input && input.value.trim()) {
+          this.processarMensagem(input.value.trim());
+          input.value = '';
+        }
+      });
+    }
+
+    // Adicionar evento de fechar no botão de fechar
+    const closeButton = document.getElementById('tono-chat-close');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        const chat = document.getElementById('tono-chat');
+        if (chat) {
+          chat.style.display = 'none';
+        }
+      });
+    }
   },
 
   // Função para limpar o chat
@@ -184,9 +225,9 @@ buscarReceitaNaInternet: async function(ingrediente) {
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'tono-loading';
     loadingDiv.innerHTML = `
-        <div class="tono-loading-dot"></div>
-        <div class="tono-loading-dot"></div>
-        <div class="tono-loading-dot"></div>
+        <img src="images/cat-typing.gif" 
+             alt="Gato digitando" 
+             style="width: 200px; height: 200px; border-radius: 10px;">
     `;
     chatBody.appendChild(loadingDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
@@ -203,17 +244,16 @@ buscarReceitaNaInternet: async function(ingrediente) {
   // Função para processar mensagem do usuário
   processarMensagem: async function(mensagem) {
     mensagem = mensagem.toLowerCase();
-    this.mostrarMensagem(mensagem, 'user');
-  
+    
     if (mensagem.includes('sim') && this.ultimoIngredienteFalhado) {
+        // Não mostrar a mensagem "sim" do usuário
         this.limparChat();
-        this.mostrarMensagem("Vou procurar uma receita na internet para você... 🍳");
+        this.mostrarMensagem("Vou procurar uma receita na internet... 🍳");
   
         try {
             // Mostrar animação de carregamento
             const loadingElement = this.mostrarLoading();
             
-            // Atualizar a URL para usar a API do site em produção
             const response = await fetch('https://talho-nascente.onrender.com/api/receita', {
                 method: 'POST',
                 headers: {
@@ -248,8 +288,18 @@ buscarReceitaNaInternet: async function(ingrediente) {
         }
   
         return;
+    } else if (this.ultimoIngredienteFalhado) {
+        // Se não for "sim" e tiver um ingrediente falhado, fechar o chat
+        this.ultimoIngredienteFalhado = null;
+        const chat = document.getElementById('tono-chat');
+        if (chat) chat.style.display = 'none';
+        return;
     }
   
+    // Para outras mensagens, mostrar a mensagem do usuário
+    this.mostrarMensagem(mensagem, 'user');
+  
+    // Buscar nas receitas locais
     const receitasEncontradas = this.procuraReceita(mensagem);
     
     if (receitasEncontradas.length > 0) {
@@ -268,51 +318,7 @@ buscarReceitaNaInternet: async function(ingrediente) {
 }
 };
 
-// Inicialização do Tono quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', function() {
-  // Inicializa o Tono
+// Inicializar o TONO quando o documento estiver pronto
+document.addEventListener('DOMContentLoaded', () => {
   TONO.init();
-  
-  // Adiciona evento de clique no mascote
-  const tonoMascote = document.getElementById('tono-mascote');
-  if (tonoMascote) {
-    tonoMascote.addEventListener('click', function() {
-      const chat = document.getElementById('tono-chat');
-      if (chat) {
-        if (chat.style.display === 'none') {
-          // Se o chat estiver fechado, limpa e abre
-          TONO.limparChat();
-          chat.style.display = 'block';
-          TONO.iniciarConversa();
-        } else {
-          // Se o chat estiver aberto, apenas fecha
-          chat.style.display = 'none';
-        }
-      }
-    });
-  }
-
-  // Adiciona evento de envio de mensagem
-  const chatForm = document.getElementById('tono-chat-form');
-  if (chatForm) {
-    chatForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const input = document.getElementById('tono-chat-input');
-      if (input && input.value.trim()) {
-        TONO.processarMensagem(input.value.trim());
-        input.value = '';
-      }
-    });
-  }
-
-  // Adiciona evento de fechar chat
-  const closeButton = document.getElementById('tono-chat-close');
-  if (closeButton) {
-    closeButton.addEventListener('click', function() {
-      const chat = document.getElementById('tono-chat');
-      if (chat) {
-        chat.style.display = 'none';
-      }
-    });
-  }
 }); 
