@@ -1,4 +1,4 @@
-# 🥩 Talho Nascente - Website aaa
+# 🥩 Talho Nascente - Website 
 
 Website oficial do Talho Nascente, uma empresa familiar com mais de 32 anos de experiência no mercado de carnes.
 
@@ -99,4 +99,4 @@ Este projeto está sob a licença ISC. Veja o arquivo `LICENSE` para mais detalh
 - [ ] Melhorar SEO
 - [ ] Implementar sistema de pedidos online
 
---
+
