@@ -1,0 +1,65 @@
+<?php
+/**
+ * Webhook para deploy automático do GitHub para cPanel
+ * 
+ * INSTRUÇÕES:
+ * 1. Copie este ficheiro para webhook.php
+ * 2. Altere $secret para um token seguro
+ * 3. Altere $path para o caminho correto do seu site
+ * 4. Faça upload para a raiz do site no cPanel
+ */
+
+// SECRET TOKEN - Altere para um token seguro (ex: gera um token aleatório)
+$secret = 'SEU_SECRET_TOKEN_AQUI';
+
+// Obter o payload do GitHub
+$payload = file_get_contents('php://input');
+$signature = $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? '';
+
+// Verificar a assinatura (opcional mas recomendado)
+if ($secret && $signature) {
+    $hash = 'sha256=' . hash_hmac('sha256', $payload, $secret);
+    if (!hash_equals($signature, $hash)) {
+        http_response_code(403);
+        die('Invalid signature');
+    }
+}
+
+// Verificar se é um push para a branch main
+$data = json_decode($payload, true);
+if (isset($data['ref']) && $data['ref'] === 'refs/heads/main') {
+    
+    // Executar git pull
+    $output = [];
+    $return_var = 0;
+    
+    // IMPORTANTE: Ajuste o caminho para o diretório do seu site
+    // Normalmente: /home/seu_usuario/public_html ou /home/seu_usuario/talhonascente.pt
+    $path = '/home/usuario/public_html'; // ⚠️ ALTERE ESTE CAMINHO!
+    
+    // Executar git pull
+    exec("cd $path && git pull origin main 2>&1", $output, $return_var);
+    
+    // Log do deploy
+    $log = date('Y-m-d H:i:s') . " - Deploy executado\n";
+    $log .= "Output: " . implode("\n", $output) . "\n";
+    $log .= "Return code: $return_var\n\n";
+    
+    file_put_contents('deploy.log', $log, FILE_APPEND);
+    
+    // Resposta para o GitHub
+    http_response_code(200);
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'Deploy executado com sucesso',
+        'output' => $output
+    ]);
+} else {
+    http_response_code(200);
+    echo json_encode([
+        'status' => 'ignored',
+        'message' => 'Não é um push para a branch main'
+    ]);
+}
+?>
+

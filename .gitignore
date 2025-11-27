@@ -1,4 +1,8 @@
 .DS_Store
 node_modules/
 .env
-*.log 
+*.log
+deploy.log
+webhook.php
+# Manter webhook.php.example para referência
+!webhook.php.example 

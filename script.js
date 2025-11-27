@@ -35,20 +35,20 @@ const products = [
     {
         name: 'Picanha',
         description: 'Corte nobre bovina',
-        price: '€ 16,95/kg',
+        price: '€ 17,95/kg',
         image: 'images/bife.jpg'
     },
     
     {
         name: 'Bife do Vazio',
         description: 'Corte macio e saboroso',
-        price: '€ 18.95/kg',
+        price: '€ 20,95/kg',
         image: 'images/bife_vazio.jpg'
     },
     {
         name: 'Bife do Rolo',
         description: 'Corte Perfeito para o Pão',
-        price: '€ 14.95/kg',
+        price: '€ 15,95/kg',
         image: 'images/bife_rolo.jpg'
     },
 
@@ -56,7 +56,7 @@ const products = [
     {
         name: 'Carne Bocadinhos',
         description: 'Perfeita para Guizar',
-        price: '€ 9,95/kg',
+        price: '€ 11,95/kg',
         image: 'images/carne_guisar.jpg'
     },
     {
@@ -87,7 +87,7 @@ const products = [
     {
         name: 'Frango',
         description: 'Perfeito para tudo',
-        price: '€ 2,65/kg',
+        price: '€ 2,99/kg',
         image: 'images/FRANGO.jpg'
     },
     {
@@ -99,7 +99,7 @@ const products = [
     {
         name: 'Coxas de Frango',
         description: 'Perfeito para Assar',
-        price: '€ 2,95/kg',
+        price: '€ 3,29/kg',
         image: 'images/coxas_frango.jpg'
     },
     {

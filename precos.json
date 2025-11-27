@@ -1,0 +1,71 @@
+{
+  "promocoes": [
+    {
+      "nome": "Costeletas da Rilada",
+      "preco": "€ 5,99/kg"
+    },
+    {
+      "nome": "Frango Panado",
+      "preco": "€ 3,99/kg"
+    },
+    {
+      "nome": "Carne para Rojões",
+      "preco": "€ 5,69/kg"
+    },
+    {
+      "nome": "Almondegas de Bife",
+      "preco": "€ 11,95/kg"
+    }
+  ],
+  "produtos": [
+    {
+      "nome": "Picanha",
+      "preco": "€ 17,95/kg"
+    },
+    {
+      "nome": "Bife do Vazio",
+      "preco": "€ 20,95/kg"
+    },
+    {
+      "nome": "Bife do Rolo",
+      "preco": "€ 15,95/kg"
+    },
+    {
+      "nome": "Carne Bocadinhos",
+      "preco": "€ 11,95/kg"
+    },
+    {
+      "nome": "Feveras de Porco",
+      "preco": "€ 5,99/kg"
+    },
+    {
+      "nome": "Lombo S/ Osso",
+      "preco": "€ 5,99/kg"
+    },
+    {
+      "nome": "Entrecosto",
+      "preco": "€ 5,95/kg"
+    },
+    {
+      "nome": "Bifanas de Porco",
+      "preco": "€ 5,99/kg"
+    },
+    {
+      "nome": "Frango",
+      "preco": "€ 2,99/kg"
+    },
+    {
+      "nome": "Asas de Frango",
+      "preco": "€ 2,39/kg"
+    },
+    {
+      "nome": "Coxas de Frango",
+      "preco": "€ 3,29/kg"
+    },
+    {
+      "nome": "Perninhas de Frango",
+      "preco": "€ 4,99/kg"
+    }
+  ]
+}
+
