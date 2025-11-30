@@ -12,3 +12,4 @@ git pull origin main
 
 echo "Deploy concluído em $(date)"
 
+

@@ -175,3 +175,4 @@ Se tiver problemas, verifique:
 - Logs do GitHub (Settings → Webhooks → Recent Deliveries)
 - Ficheiro `deploy.log` no servidor
 
+

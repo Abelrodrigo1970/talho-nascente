@@ -30,89 +30,140 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Sample Products Data
-const products = [
+// Dados dos produtos (sem preços - serão carregados do JSON)
+const productsData = [
     {
         name: 'Picanha',
         description: 'Corte nobre bovina',
-        price: '€ 17,95/kg',
         image: 'images/bife.jpg'
     },
-    
     {
         name: 'Bife do Vazio',
         description: 'Corte macio e saboroso',
-        price: '€ 20,95/kg',
         image: 'images/bife_vazio.jpg'
     },
     {
         name: 'Bife do Rolo',
         description: 'Corte Perfeito para o Pão',
-        price: '€ 15,95/kg',
         image: 'images/bife_rolo.jpg'
     },
-
-    
     {
         name: 'Carne Bocadinhos',
         description: 'Perfeita para Guizar',
-        price: '€ 11,95/kg',
         image: 'images/carne_guisar.jpg'
     },
     {
         name: 'Feveras de Porco ',
         description: 'Para Grelhas, Panar',
-        price: '€ 5,99/kg',
         image: 'images/feveras.jpg'
     },
-
     {
         name: 'Lombo S/ Osso',
         description: 'Lombo para Assar',
-        price: '€ 5,99/kg',
         image: 'images/lombo_sem osso.jpg'
     },
     {
         name: 'Entrecosto',
         description: 'Perfeita para Grelhar',
-        price: '€ 5,95/kg',
         image: 'images/entrecosto3.jpg'
     },
     {
         name: 'Bifanas de Porco',
         description: 'Perfeito para o Pão',
-        price: '€ 5,99/kg',
         image: 'images/bifanas.jpg'
     },
     {
         name: 'Frango',
         description: 'Perfeito para tudo',
-        price: '€ 2,99/kg',
         image: 'images/FRANGO.jpg'
     },
     {
         name: 'Asas de Frango',
         description: 'Perfeito para Grelhar',
-        price: '€ 2,39/kg',
         image: 'images/ASAS_FRANGO.jpg'
     },   
     {
         name: 'Coxas de Frango',
         description: 'Perfeito para Assar',
-        price: '€ 3,29/kg',
         image: 'images/coxas_frango.jpg'
     },
     {
         name: 'Perninhas de Frango',
         description: 'Perfeito para a Air Fryer',
-        price: '€ 4,99/kg',
         image: 'images/pernas_frango.jpg'
     }
 ];
 
+// Mapeamento das promoções (ordem no HTML)
+const promocoesOrder = [
+    'Costeletas da Rilada',
+    'Frango Panado',
+    'Carne para Rojões',
+    'Almondegas de Bife'
+];
+
+// Carregar preços do JSON
+async function loadPrecos() {
+    try {
+        const response = await fetch('precos.json');
+        if (!response.ok) throw new Error('Erro ao carregar preços');
+        
+        const precos = await response.json();
+        
+        // Atualizar preços dos produtos
+        if (precos.produtos && precos.produtos.length > 0) {
+            const products = productsData.map((product) => {
+                const precoData = precos.produtos.find(p => p.nome === product.name);
+                return {
+                    ...product,
+                    price: precoData ? precoData.preco : 'Preço não disponível'
+                };
+            });
+            loadProducts(products);
+        } else {
+            // Fallback: usar produtos sem preço
+            loadProducts(productsData.map(p => ({ ...p, price: 'Preço não disponível' })));
+        }
+        
+        // Atualizar preços das promoções
+        if (precos.promocoes && precos.promocoes.length > 0) {
+            updatePromocoesPrecos(precos.promocoes);
+        }
+        
+    } catch (error) {
+        console.error('Erro ao carregar preços do JSON:', error);
+        // Fallback: usar produtos sem preço
+        loadProducts(productsData.map(p => ({ ...p, price: 'Preço não disponível' })));
+    }
+}
+
+// Atualizar preços das promoções no HTML
+function updatePromocoesPrecos(promocoes) {
+    const promoCards = document.querySelectorAll('.promo-card');
+    
+    promocoesOrder.forEach((nomePromo, index) => {
+        const promoData = promocoes.find(p => p.nome === nomePromo);
+        if (promoData && promoCards[index]) {
+            const priceElement = promoCards[index].querySelector('.price');
+            if (priceElement) {
+                // Manter o formato "Apenas" se já existir, senão usar apenas o preço
+                const currentText = priceElement.textContent.trim();
+                if (currentText.includes('Apenas') || currentText.startsWith('Apenas')) {
+                    priceElement.textContent = 'Apenas ' + promoData.preco;
+                } else {
+                    priceElement.textContent = promoData.preco;
+                }
+            }
+        }
+    });
+}
+
 // Load Products Dynamically
-function loadProducts() {
+function loadProducts(products) {
     const productsGrid = document.querySelector('.products-grid');
+    if (!productsGrid) return;
+    
+    productsGrid.innerHTML = '';
     
     products.forEach(product => {
         const productCard = document.createElement('div');
@@ -127,57 +178,52 @@ function loadProducts() {
     });
 }
 
+// Carregar receitas dinamicamente
+function loadReceitas() {
+    const grid = document.getElementById('recipes-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    receitas.forEach(receita => {
+        const card = document.createElement('div');
+        card.className = 'recipe-card';
+        card.style.cursor = 'pointer';
+        card.innerHTML = `
+            <img src="${receita.imagem}" alt="${receita.nome}">
+            <h3>${receita.nome}</h3>
+            <p>${receita.resumo}</p>
+        `;
+        card.addEventListener('click', () => TONO.mostrarReceitaNoModal(receita));
+        grid.appendChild(card);
+    });
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
+    // Carregar preços do JSON
+    loadPrecos();
+    
+    // Carregar receitas
+    loadReceitas();
     
     // Add scroll event listener for header
     window.addEventListener('scroll', () => {
         const header = document.querySelector('header');
-        header.classList.toggle('scrolled', window.scrollY > 0);
+        if (header) {
+            header.classList.toggle('scrolled', window.scrollY > 0);
+        }
     });
+    
+    // Fechar modal
+    const modal = document.getElementById('modal-receita');
+    const closeModal = document.querySelector('#modal-receita .close-modal');
+    if (closeModal && modal) {
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
 });
-
-// Carregar receitas dinamicamente
-function loadReceitas() {
-  const grid = document.getElementById('recipes-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  receitas.forEach(receita => {
-    const card = document.createElement('div');
-    card.className = 'recipe-card';
-    card.style.cursor = 'pointer';
-    card.innerHTML = `
-      <img src="${receita.imagem}" alt="${receita.nome}">
-      <h3>${receita.nome}</h3>
-      <p>${receita.resumo}</p>
-    `;
-    card.addEventListener('click', () => TONO.mostrarReceitaNoModal(receita));
-    grid.appendChild(card);
-  });
-}
-
-// Fechar modal
-document.addEventListener('DOMContentLoaded', function() {
-  loadReceitas();
-  const modal = document.getElementById('modal-receita');
-  const closeModal = document.querySelector('#modal-receita .close-modal');
-  if (closeModal && modal) {
-    closeModal.addEventListener('click', function() {
-      modal.style.display = 'none';
-    });
-    window.addEventListener('click', function(event) {
-      if (event.target == modal) {
-        modal.style.display = 'none';
-      }
-    });
-  }
-/*
-  const tonoMascote = document.getElementById('tono-mascote');
-  if (tonoMascote) {
-    tonoMascote.addEventListener('click', function() {
-      const sugestao = TONO.sugereReceita();
-      TONO.mostrarReceitaNoModal(sugestao);
-    });
-  }*/
-}); 
